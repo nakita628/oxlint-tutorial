@@ -122,6 +122,202 @@ pnpm print-config     # 実際に適用される設定を JSON で出力
 | `verify`  | `pnpm verify`（全ルールの発火まで検証）                                          |
 | `rules`   | `docs/RULES.md` が最新であること                                                 |
 
+## 実プロジェクトでの推奨設定
+
+**このリポジトリのように 870 ルールを列挙する必要はありません。**
+それは「全ルールを 1 つずつ動作確認する」というこのリポジトリの目的のためであって、
+実プロジェクトでは oxlint が用意している `categories` を使うのが本来の使い方です。
+
+### まずは `oxlint --init`
+
+```bash
+pnpm add -D oxlint
+npx oxlint --init
+```
+
+生成される `.oxlintrc.json` がそのまま推奨の出発点です。
+
+```json
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "plugins": ["typescript", "unicorn", "oxc"],
+  "categories": {
+    "correctness": "error"
+  },
+  "rules": {},
+  "env": {
+    "builtin": true
+  }
+}
+```
+
+これだけで **111 ルール** が有効になります。
+`correctness` は「明確に間違っている／無意味なコード」だけを集めたカテゴリなので、
+既存プロジェクトに後から入れても大量のエラーが出にくく、誤検知もほとんどありません。
+
+### カテゴリで段階的に強くする
+
+厳しさはルールを 1 つずつ足すのではなく、カテゴリ単位で調整します。
+実際に `--print-config` で数えた有効ルール数は次のとおりです。
+
+| 設定                             | 有効ルール数 | 想定                                 |
+| -------------------------------- | -----------: | ------------------------------------ |
+| 既定（`oxlint --init` のまま）   |          111 | まず入れてみる段階                   |
+| 全 15 プラグイン + `correctness` |          272 | フレームワークまで含めた最小構成     |
+| 上記 + `suspicious` + `perf`     |          350 | **多くのプロジェクトの落としどころ** |
+| 上記 + `pedantic` + `style`      |          756 | コードスタイルまで統一したい場合     |
+| CLI の `-D all`                  |          859 | `nursery` 以外すべて（試すとき用）   |
+
+カテゴリは全部で 7 つあります。
+
+| カテゴリ      | ルール数 | 内容                               | おすすめ                      |
+| ------------- | -------: | ---------------------------------- | ----------------------------- |
+| `correctness` |      272 | 明確に間違っている／無意味なコード | ✅ 既定で有効。必ず入れる     |
+| `suspicious`  |       63 | ほぼ間違いだろうというコード       | ✅ 入れてよい                 |
+| `perf`        |       15 | より高速に書けるコード             | ✅ 入れてよい                 |
+| `pedantic`    |      126 | 厳しめ。まれに誤検知が出る         | 🔸 好みが分かれる             |
+| `style`       |      280 | より慣用的な書き方に寄せる         | 🔸 フォーマッタと役割が重なる |
+| `restriction` |      103 | 言語機能そのものの使用を制限する   | 🔸 プロジェクト方針しだい     |
+| `nursery`     |       11 | 開発中の新ルール                   | ⚠️ 本番では非推奨             |
+
+なお `all` は CLI の `-D all` でだけ使えます。`categories` には書けません。
+
+### すぐ使える設定例
+
+**React + TypeScript のアプリ（246 ルール）**
+
+```ts
+import { defineConfig } from 'oxlint'
+
+export default defineConfig({
+  plugins: ['eslint', 'typescript', 'unicorn', 'oxc', 'import', 'react', 'jsx-a11y'],
+  categories: {
+    correctness: 'error',
+    suspicious: 'error',
+    perf: 'error',
+  },
+  env: { builtin: true, browser: true },
+  rules: {
+    // カテゴリで有効になったもののうち、合わないものだけ個別に外す
+    'unicorn/no-null': 'off',
+    'unicorn/prefer-top-level-await': 'off',
+  },
+  overrides: [
+    {
+      // テストファイルだけルールをゆるめる
+      files: ['**/*.test.ts', '**/*.test.tsx'],
+      plugins: ['vitest'],
+      env: { vitest: true },
+      rules: {
+        'typescript/no-explicit-any': 'off',
+      },
+    },
+  ],
+})
+```
+
+**Node.js のライブラリ（171 ルール）**
+
+```ts
+import { defineConfig } from 'oxlint'
+
+export default defineConfig({
+  plugins: ['eslint', 'typescript', 'unicorn', 'oxc', 'import', 'promise', 'node'],
+  categories: {
+    correctness: 'error',
+    suspicious: 'error',
+    perf: 'error',
+  },
+  env: { builtin: true, node: true },
+  options: {
+    // 型情報が必要なルールも使う（oxlint-tsgolint が必要）
+    typeAware: true,
+  },
+})
+```
+
+### 設定を共有する
+
+複数プロジェクトで同じ設定を使う場合は `extends` を使います。
+
+```ts
+// oxlint.config.ts
+import { defineConfig } from 'oxlint'
+
+import { base } from './configs/base.ts'
+
+export default defineConfig({
+  extends: [base],
+  rules: {
+    // プロジェクト固有の上書きだけをここに書く
+    'eslint/no-console': 'error',
+  },
+})
+```
+
+JSON 形式では設定ファイルからの相対パスで指定します。
+
+```json
+{ "extends": ["./configs/base.json"] }
+```
+
+複数指定した場合は左から右へマージされ、後ろの設定が前を上書きします。
+最終的に、継承先のファイル自身の指定が最優先です。
+
+### モノレポではネスト設定
+
+パッケージごとに設定を変えたい場合は、各ディレクトリに設定ファイルを置くだけです。
+oxlint は **対象ファイルに一番近い設定ファイル** を使います。
+
+```
+my-project/
+├── .oxlintrc.json          ← src/ 配下はこれ
+├── src/index.ts
+├── packages/web/
+│   ├── oxlint.config.ts    ← packages/web/ 配下はこれ
+│   └── index.tsx
+└── packages/api/
+    ├── .oxlintrc.json      ← packages/api/ 配下はこれ
+    └── index.ts
+```
+
+親子の設定は **自動マージされません**（共有したい部分は `extends` で明示的に取り込みます）。
+この挙動が不要なら `--disable-nested-config` で無効にできます。
+
+### ESLint からの移行
+
+既存の ESLint 設定があるなら、変換ツールが使えます。
+
+```bash
+npx @oxlint/migrate
+```
+
+### 個別ルールの微調整
+
+カテゴリで有効にしたあと、合わないルールだけを外していくのが実務的です。
+
+```ts
+rules: {
+  'unicorn/no-null': 'off',                 // 個別に無効化
+  'eslint/no-console': 'warn',              // 重大度を下げる
+  'eslint/max-params': ['error', { max: 4 }], // オプションを渡す
+}
+```
+
+一時的に試すだけなら CLI でも切り替えられます（左から右へ適用されます）。
+
+```bash
+oxlint -D correctness -D suspicious -A unicorn/no-null
+oxlint -D all -A nursery       # nursery 以外を全部試す
+```
+
+### このリポジトリが 870 ルールを列挙している理由
+
+`packages/*-invalid` に置いた違反サンプルが本当に検出されるかを
+`scripts/verify.ts` が 1 ルールずつ突き合わせるため、
+「どのルールを検証したか」を設定ファイル上で明示する必要があるからです。
+実プロジェクトの設定としてそのままコピーする用途は想定していません。
+
 ## 設定ファイル（oxlint.config.ts）
 
 設定ファイルとして認識されるファイル名は次の 4 つです。
