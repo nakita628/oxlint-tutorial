@@ -59,10 +59,11 @@ export function switchBreakPosition(value: number): string {
   let result = 'other'
   switch (value) {
     // unicorn/switch-case-break-position: break はブロックの中に置く
-    case 1: {
-      result = 'one'
-    }
-    break
+    case 1:
+      {
+        result = 'one'
+      }
+      break
     default: {
       result = 'other'
     }

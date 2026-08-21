@@ -29,7 +29,11 @@ function splitRuleKey(key: string): { plugin: string; name: string } {
 function isEnabled(value: Severity): boolean {
   const severity = Array.isArray(value) ? value[0] : value
   return (
-    severity === 'error' || severity === 'deny' || severity === 'warn' || severity === 2 || severity === 1
+    severity === 'error' ||
+    severity === 'deny' ||
+    severity === 'warn' ||
+    severity === 2 ||
+    severity === 1
   )
 }
 
@@ -78,7 +82,9 @@ lines.push('# oxlint ルールカバレッジ')
 lines.push('')
 lines.push('`pnpm rules` で生成しています（手で編集しないでください）。')
 lines.push('')
-lines.push('- ✅ … `oxlint.config.ts` で `error` にしていて、`packages/*-invalid` に違反サンプルがある')
+lines.push(
+  '- ✅ … `oxlint.config.ts` で `error` にしていて、`packages/*-invalid` に違反サンプルがある',
+)
 lines.push('- ⚪ … 理由付きで `off` にしている（設定ファイル内のコメント参照）')
 lines.push('')
 

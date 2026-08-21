@@ -1027,7 +1027,10 @@ export default defineConfig({
     // packages/*/src/default-only : default export に寄せるルール
     // ----------------------------------------------------------------
     {
-      files: ['packages/import-valid/src/default-only/**', 'packages/import-invalid/src/default-only/**'],
+      files: [
+        'packages/import-valid/src/default-only/**',
+        'packages/import-invalid/src/default-only/**',
+      ],
       plugins: ['import'],
       rules: {
         'import/no-named-export': 'error', // 名前付き export を禁止
@@ -1591,21 +1594,5 @@ export default defineConfig({
         'vue/return-in-emits-validator': 'error', // emits のバリデータは真偽値を返す
       },
     },
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
   ],
 })

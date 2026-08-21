@@ -36,11 +36,18 @@ function ruleKeyToName(key: string): string {
 function isEnabled(value: unknown): boolean {
   const severity = Array.isArray(value) ? value[0] : value
   return (
-    severity === 'error' || severity === 'deny' || severity === 'warn' || severity === 2 || severity === 1
+    severity === 'error' ||
+    severity === 'deny' ||
+    severity === 'warn' ||
+    severity === 2 ||
+    severity === 1
   )
 }
 
-function runOxlint(target: string, typeAware: boolean): { status: number; diagnostics: Diagnostic[] } {
+function runOxlint(
+  target: string,
+  typeAware: boolean,
+): { status: number; diagnostics: Diagnostic[] } {
   const args = typeAware ? ['--type-aware', target, '-f', 'json'] : [target, '-f', 'json']
   const result = spawnSync(OXLINT, args, { encoding: 'utf8', maxBuffer: 128 * 1024 * 1024 })
   const stdout = result.stdout ?? ''
@@ -127,7 +134,9 @@ for (const override of config.overrides ?? []) {
   )
 }
 
-process.stdout.write(`\n検証したパッケージ: ${checkedPackages} ペア / 検証したルール: ${checkedRules}\n`)
+process.stdout.write(
+  `\n検証したパッケージ: ${checkedPackages} ペア / 検証したルール: ${checkedRules}\n`,
+)
 
 if (failures.length > 0) {
   process.stdout.write(`\n=== 失敗 (${failures.length}) ===\n`)

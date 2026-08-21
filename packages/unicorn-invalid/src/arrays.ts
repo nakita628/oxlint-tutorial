@@ -14,10 +14,13 @@ export function forEach(values: Array<number>): void {
 
 export function reduceSum(values: Array<number>): Record<string, number> {
   // unicorn/no-array-reduce: reduce は読みにくい
-  return values.reduce((accumulator, value) => {
-    accumulator[String(value)] = value
-    return accumulator
-  }, {} as Record<string, number>)
+  return values.reduce(
+    (accumulator, value) => {
+      accumulator[String(value)] = value
+      return accumulator
+    },
+    {} as Record<string, number>,
+  )
 }
 
 function toLength(value: string): number {

@@ -17,7 +17,12 @@ const Child = ({ items, config, onClick, slot }: Props): JSX.Element => (
 
 export const NewArrayAsProp = (): JSX.Element => (
   // react-perf/jsx-no-new-array-as-prop: 配列リテラルを毎回作ると再レンダーの原因になる
-  <Child items={[1, 2, 3]} config={{ retries: 1 }} onClick={(): void => undefined} slot={<span />} />
+  <Child
+    items={[1, 2, 3]}
+    config={{ retries: 1 }}
+    onClick={(): void => undefined}
+    slot={<span />}
+  />
 )
 
 export const NewObjectAsProp = (): JSX.Element => {
@@ -26,11 +31,6 @@ export const NewObjectAsProp = (): JSX.Element => {
   // react-perf/jsx-no-new-function-as-prop: 関数を毎回作らない
   // react-perf/jsx-no-jsx-as-prop: JSX を props として毎回作らない
   return (
-    <Child
-      items={items}
-      config={{ retries: 1 }}
-      onClick={(): void => undefined}
-      slot={<span />}
-    />
+    <Child items={items} config={{ retries: 1 }} onClick={(): void => undefined} slot={<span />} />
   )
 }

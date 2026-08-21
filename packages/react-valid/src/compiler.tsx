@@ -61,6 +61,4 @@ export const GoodMemo = ({ items }: { items: Array<number> }): JSX.Element => {
 }
 
 // react/incompatible-library: メモ化と相性の悪いライブラリ API は使わない
-export const Table = ({ rows }: { rows: Array<number> }): JSX.Element => (
-  <div>{rows.length}</div>
-)
+export const Table = ({ rows }: { rows: Array<number> }): JSX.Element => <div>{rows.length}</div>

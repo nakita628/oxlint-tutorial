@@ -2,7 +2,6 @@
   "name": "oxlint-tutorial",
   "private": true,
   "type": "module",
-  "packageManager": "pnpm@11.7.0",
   "scripts": {
     "lint": "oxlint",
     "lint:valid": "oxlint packages/valid",
@@ -14,7 +13,9 @@
     "verify": "node scripts/verify.ts"
   },
   "devDependencies": {
+    "oxfmt": "^0.64.0",
     "oxlint": "^1.79.0",
     "oxlint-tsgolint": "^7.0.2001"
-  }
+  },
+  "packageManager": "pnpm@11.7.0"
 }

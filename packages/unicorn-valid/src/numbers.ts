@@ -12,7 +12,7 @@ export function zeroFraction(): number {
 
 export function literalCase(): number {
   // unicorn/number-literal-case: 接頭辞は小文字 0x、16 進の英字は大文字
-  return 0xFF
+  return 0xff
 }
 
 export function separators(): number {

@@ -30,6 +30,4 @@ export const Forbidden = (): JSX.Element => <marquee>{'moving'}</marquee>
 export const ForbiddenDomProp = (): JSX.Element => <div id="app">{'app'}</div>
 
 // react/forbid-component-props: 設定で禁止したコンポーネントの props を使っている
-export const ForbiddenComponentProp = (): JSX.Element => (
-  <Another className="wrapper" />
-)
+export const ForbiddenComponentProp = (): JSX.Element => <Another className="wrapper" />

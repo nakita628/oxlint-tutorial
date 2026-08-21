@@ -14,23 +14,23 @@ oxlint v1.79.0 が持つ **870 ルールすべて** を `oxlint.config.ts` に�
 ## ルールカバレッジ
 
 | プラグイン | 検証済み | 全ルール数 |
-| --- | ---: | ---: |
-| eslint | 183 | 187 |
-| typescript | 109 | 110 |
-| unicorn | 138 | 138 |
-| oxc | 26 | 27 |
-| import | 32 | 33 |
-| jsdoc | 23 | 23 |
-| jest | 60 | 60 |
-| vitest | 73 | 73 |
-| react | 81 | 85 |
-| react-perf | 4 | 4 |
-| jsx-a11y | 36 | 36 |
-| nextjs | 21 | 21 |
-| promise | 16 | 16 |
-| node | 11 | 11 |
-| vue | 46 | 46 |
-| **合計** | **859** | **870** |
+| ---------- | -------: | ---------: |
+| eslint     |      183 |        187 |
+| typescript |      109 |        110 |
+| unicorn    |      138 |        138 |
+| oxc        |       26 |         27 |
+| import     |       32 |         33 |
+| jsdoc      |       23 |         23 |
+| jest       |       60 |         60 |
+| vitest     |       73 |         73 |
+| react      |       81 |         85 |
+| react-perf |        4 |          4 |
+| jsx-a11y   |       36 |         36 |
+| nextjs     |       21 |         21 |
+| promise    |       16 |         16 |
+| node       |       11 |         11 |
+| vue        |       46 |         46 |
+| **合計**   |  **859** |    **870** |
 
 プラグインごとの一覧は [`docs/RULES.md`](./docs/RULES.md)（`pnpm rules` で生成）を参照してください。
 
@@ -66,13 +66,13 @@ oxlint v1.79.0 が持つ **870 ルールすべて** を `oxlint.config.ts` に�
 
 一部のパッケージには、他のルールと同時には有効化できないルール用のサブディレクトリがあります。
 
-| サブディレクトリ | 内容 |
-| --- | --- |
-| `src/strict/` | `no-magic-numbers` / `no-ternary` / `no-hooks` など、通常のサンプルと両立しない厳格なルール |
-| `src/sloppy/` | ES モジュールでは構文エラーになるもの（`.cts` のスクリプトで検証） |
-| `src/solo/` | 構文エラーが他のルールを止めてしまうため、1 ファイル 1 ルールに分けたもの |
-| `src/alt/` | `prefer-todo` と `warn-todo` のように、互いに排他的な方針を分けたもの |
-| `src/default-only/`, `src/grouped-exports/` | `import/no-default-export` と `import/prefer-default-export` のような排他ルール |
+| サブディレクトリ                            | 内容                                                                                        |
+| ------------------------------------------- | ------------------------------------------------------------------------------------------- |
+| `src/strict/`                               | `no-magic-numbers` / `no-ternary` / `no-hooks` など、通常のサンプルと両立しない厳格なルール |
+| `src/sloppy/`                               | ES モジュールでは構文エラーになるもの（`.cts` のスクリプトで検証）                          |
+| `src/solo/`                                 | 構文エラーが他のルールを止めてしまうため、1 ファイル 1 ルールに分けたもの                   |
+| `src/alt/`                                  | `prefer-todo` と `warn-todo` のように、互いに排他的な方針を分けたもの                       |
+| `src/default-only/`, `src/grouped-exports/` | `import/no-default-export` と `import/prefer-default-export` のような排他ルール             |
 
 ## セットアップ
 
@@ -108,55 +108,55 @@ pnpm print-config     # 実際に適用される設定を JSON で出力
 
 [`.github/workflows/lint.yml`](./.github/workflows/lint.yml) に 4 つのジョブがあります。
 
-| ジョブ | 内容 |
-| --- | --- |
-| `valid` | すべての `packages/*-valid` で oxlint が成功すること |
+| ジョブ    | 内容                                                                             |
+| --------- | -------------------------------------------------------------------------------- |
+| `valid`   | すべての `packages/*-valid` で oxlint が成功すること                             |
 | `invalid` | すべての `packages/*-invalid` で oxlint が失敗すること（成功したら CI を落とす） |
-| `verify` | `pnpm verify`（全ルールの発火まで検証） |
-| `rules` | `docs/RULES.md` が最新であること |
+| `verify`  | `pnpm verify`（全ルールの発火まで検証）                                          |
+| `rules`   | `docs/RULES.md` が最新であること                                                 |
 
 ## 設定ファイル（oxlint.config.ts）
 
 設定ファイルとして認識されるファイル名は次の 4 つです。
 
-| ファイル名 | 形式 | 備考 |
-| --- | --- | --- |
-| `.oxlintrc.json` | JSON | すべての実行環境で使える |
-| `.oxlintrc.jsonc` | JSON（コメント可） | 同上 |
-| `oxlint.config.ts` | TypeScript | Node.js 経由の実行が前提 |
-| `oxlint.config.mts` | TypeScript | 同上 |
+| ファイル名          | 形式               | 備考                     |
+| ------------------- | ------------------ | ------------------------ |
+| `.oxlintrc.json`    | JSON               | すべての実行環境で使える |
+| `.oxlintrc.jsonc`   | JSON（コメント可） | 同上                     |
+| `oxlint.config.ts`  | TypeScript         | Node.js 経由の実行が前提 |
+| `oxlint.config.mts` | TypeScript         | 同上                     |
 
 同一ディレクトリに JSON 形式と TypeScript 形式を同時に置くことはできません。
 
 このリポジトリの `oxlint.config.ts` には、oxlint がサポートするトップレベル設定を
 省略せずにすべて書いています。
 
-| フィールド | 内容 |
-| --- | --- |
-| `$schema` | エディタ補完・検証用の JSON Schema |
-| `extends` | 他の設定の継承（TypeScript 形式では設定オブジェクトの配列） |
-| `plugins` | 有効化する組み込みプラグイン（15 種類） |
-| `categories` | カテゴリ単位の重大度（7 種類） |
-| `rules` | ルール単位の設定 |
-| `settings` | プラグイン共通の設定（jest / jsdoc / jsx-a11y / next / react / vitest） |
-| `env` | 事前定義済みグローバル変数セット |
-| `globals` | 独自のグローバル変数 |
-| `ignorePatterns` | lint 対象から除外するパターン |
-| `jsPlugins` | JavaScript で書かれた外部プラグイン（alpha） |
-| `options` | リンタ自身の挙動（CLI フラグ相当） |
-| `overrides` | ファイルパターンごとの設定 |
+| フィールド       | 内容                                                                    |
+| ---------------- | ----------------------------------------------------------------------- |
+| `$schema`        | エディタ補完・検証用の JSON Schema                                      |
+| `extends`        | 他の設定の継承（TypeScript 形式では設定オブジェクトの配列）             |
+| `plugins`        | 有効化する組み込みプラグイン（15 種類）                                 |
+| `categories`     | カテゴリ単位の重大度（7 種類）                                          |
+| `rules`          | ルール単位の設定                                                        |
+| `settings`       | プラグイン共通の設定（jest / jsdoc / jsx-a11y / next / react / vitest） |
+| `env`            | 事前定義済みグローバル変数セット                                        |
+| `globals`        | 独自のグローバル変数                                                    |
+| `ignorePatterns` | lint 対象から除外するパターン                                           |
+| `jsPlugins`      | JavaScript で書かれた外部プラグイン（alpha）                            |
+| `options`        | リンタ自身の挙動（CLI フラグ相当）                                      |
+| `overrides`      | ファイルパターンごとの設定                                              |
 
 ### カテゴリ
 
-| カテゴリ | ルール数 | 内容 |
-| --- | ---: | --- |
-| `correctness` | 272 | 明確に間違っている／無意味なコード（既定で有効） |
-| `suspicious` | 63 | ほぼ間違いだろうというコード |
-| `pedantic` | 126 | 厳しめ。まれに誤検知が出る |
-| `perf` | 15 | より高速に書けるコード |
-| `restriction` | 103 | 言語機能そのものの使用を制限する |
-| `style` | 280 | より慣用的な書き方に寄せる |
-| `nursery` | 11 | 開発中の新ルール（`all` にも含まれない） |
+| カテゴリ      | ルール数 | 内容                                             |
+| ------------- | -------: | ------------------------------------------------ |
+| `correctness` |      272 | 明確に間違っている／無意味なコード（既定で有効） |
+| `suspicious`  |       63 | ほぼ間違いだろうというコード                     |
+| `pedantic`    |      126 | 厳しめ。まれに誤検知が出る                       |
+| `perf`        |       15 | より高速に書けるコード                           |
+| `restriction` |      103 | 言語機能そのものの使用を制限する                 |
+| `style`       |      280 | より慣用的な書き方に寄せる                       |
+| `nursery`     |       11 | 開発中の新ルール（`all` にも含まれない）         |
 
 ### プラグイン
 
@@ -222,27 +222,27 @@ oxlint -f agent        # コーディングエージェント向け
 
 ## 主な CLI オプション
 
-| オプション | 内容 |
-| --- | --- |
-| `-c, --config <path>` | 設定ファイルを明示指定する |
-| `--tsconfig <path>` | import 解決に使う tsconfig を明示指定する |
-| `--init` | 既定値の設定ファイルを生成する |
-| `-A, --allow <name>` / `-W, --warn <name>` / `-D, --deny <name>` | ルール／カテゴリの重大度を左から順に上書きする |
-| `--type-aware` | 型情報が必要なルールを有効化する |
-| `--type-check` | TypeScript のコンパイラ診断も出す（実験的） |
-| `--fix` / `--fix-suggestions` / `--fix-dangerously` | 自動修正 |
-| `--ignore-path <path>` / `--ignore-pattern <pat>` / `--no-ignore` | 無視設定 |
-| `--quiet` / `--deny-warnings` / `--max-warnings <n>` | 警告の扱い |
-| `-f, --format <fmt>` | 出力フォーマット |
-| `--print-config` | マージ後の設定を JSON で出力する |
-| `--rules` | 登録されているルールを一覧する |
-| `--threads <n>` | 使用するスレッド数 |
-| `--silent` | 診断を表示しない |
-| `--no-error-on-unmatched-pattern` | 対象ファイルが 0 件でもエラーにしない |
-| `--disable-nested-config` | ネストした設定ファイルの自動読み込みを無効にする |
-| `--lsp` | 言語サーバーとして起動する |
-| `--debug files` / `--debug timings` | 対象ファイル一覧／ルールごとの実行時間 |
-| `--report-unused-disable-directives` | 効いていない抑制コメントを報告する |
+| オプション                                                        | 内容                                             |
+| ----------------------------------------------------------------- | ------------------------------------------------ |
+| `-c, --config <path>`                                             | 設定ファイルを明示指定する                       |
+| `--tsconfig <path>`                                               | import 解決に使う tsconfig を明示指定する        |
+| `--init`                                                          | 既定値の設定ファイルを生成する                   |
+| `-A, --allow <name>` / `-W, --warn <name>` / `-D, --deny <name>`  | ルール／カテゴリの重大度を左から順に上書きする   |
+| `--type-aware`                                                    | 型情報が必要なルールを有効化する                 |
+| `--type-check`                                                    | TypeScript のコンパイラ診断も出す（実験的）      |
+| `--fix` / `--fix-suggestions` / `--fix-dangerously`               | 自動修正                                         |
+| `--ignore-path <path>` / `--ignore-pattern <pat>` / `--no-ignore` | 無視設定                                         |
+| `--quiet` / `--deny-warnings` / `--max-warnings <n>`              | 警告の扱い                                       |
+| `-f, --format <fmt>`                                              | 出力フォーマット                                 |
+| `--print-config`                                                  | マージ後の設定を JSON で出力する                 |
+| `--rules`                                                         | 登録されているルールを一覧する                   |
+| `--threads <n>`                                                   | 使用するスレッド数                               |
+| `--silent`                                                        | 診断を表示しない                                 |
+| `--no-error-on-unmatched-pattern`                                 | 対象ファイルが 0 件でもエラーにしない            |
+| `--disable-nested-config`                                         | ネストした設定ファイルの自動読み込みを無効にする |
+| `--lsp`                                                           | 言語サーバーとして起動する                       |
+| `--debug files` / `--debug timings`                               | 対象ファイル一覧／ルールごとの実行時間           |
+| `--report-unused-disable-directives`                              | 効いていない抑制コメントを報告する               |
 
 プラグインを CLI から有効化するフラグもあります
 （`--react-plugin` / `--jest-plugin` / `--vitest-plugin` / `--jsx-a11y-plugin` /
@@ -268,19 +268,19 @@ Tailwind のユーティリティクラスを使った UI に対して
 
 理由は `oxlint.config.ts` の該当箇所にコメントで書いています。
 
-| ルール | 理由 |
-| --- | --- |
-| `eslint/getter-return` | TypeScript ファイルでは動作しない（型チェックが同等の検査を行うため） |
-| `eslint/no-dupe-class-members` | メンバー名の重複が先に構文エラーになる |
-| `eslint/no-implicit-globals` | 素の script でのみ成立するが、oxlint は `.cts` も CommonJS モジュールとして扱う |
-| `eslint/no-with` | `with` は strict mode で構文エラーになる |
-| `import/named` | TypeScript ファイルでは報告されない（tsc が同等の検査を行うため） |
-| `oxc/no-barrel-file` | 100 モジュール超の `export *` が必要 |
-| `react/invariant` | React Compiler 内部のバグを報告するルール |
-| `react/jsx-filename-extension` | `.ts` に JSX を書くと構文エラーになる |
-| `react/preserve-manual-memoization` | React Compiler がメモ化を保持できなかったときにだけ出る |
-| `react/todo` | React Compiler が未対応機能に遭遇したときにだけ出る |
-| `typescript/restrict-plus-operands` | tsgolint 側が未実装（型情報つき 61 ルール中 2 ルールが未実装） |
+| ルール                              | 理由                                                                            |
+| ----------------------------------- | ------------------------------------------------------------------------------- |
+| `eslint/getter-return`              | TypeScript ファイルでは動作しない（型チェックが同等の検査を行うため）           |
+| `eslint/no-dupe-class-members`      | メンバー名の重複が先に構文エラーになる                                          |
+| `eslint/no-implicit-globals`        | 素の script でのみ成立するが、oxlint は `.cts` も CommonJS モジュールとして扱う |
+| `eslint/no-with`                    | `with` は strict mode で構文エラーになる                                        |
+| `import/named`                      | TypeScript ファイルでは報告されない（tsc が同等の検査を行うため）               |
+| `oxc/no-barrel-file`                | 100 モジュール超の `export *` が必要                                            |
+| `react/invariant`                   | React Compiler 内部のバグを報告するルール                                       |
+| `react/jsx-filename-extension`      | `.ts` に JSX を書くと構文エラーになる                                           |
+| `react/preserve-manual-memoization` | React Compiler がメモ化を保持できなかったときにだけ出る                         |
+| `react/todo`                        | React Compiler が未対応機能に遭遇したときにだけ出る                             |
+| `typescript/restrict-plus-operands` | tsgolint 側が未実装（型情報つき 61 ルール中 2 ルールが未実装）                  |
 
 ## 参考
 

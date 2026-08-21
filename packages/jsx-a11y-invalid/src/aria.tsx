@@ -19,7 +19,11 @@ export const MissingRequiredAria = (): JSX.Element => <div role="checkbox" />
 export const UnsupportedAriaProp = (): JSX.Element => <div role="link" aria-checked="true" />
 
 // jsx-a11y/no-aria-hidden-on-focusable: フォーカスできる要素に aria-hidden を付けない
-export const HiddenFocusable = (): JSX.Element => <a href="/" aria-hidden="true">link</a>
+export const HiddenFocusable = (): JSX.Element => (
+  <a href="/" aria-hidden="true">
+    link
+  </a>
+)
 
 // jsx-a11y/aria-activedescendant-has-tabindex: aria-activedescendant には tabIndex が必要
 export const ActiveDescendant = (): JSX.Element => <div aria-activedescendant="item-1" />

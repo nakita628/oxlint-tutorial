@@ -4,9 +4,7 @@
 export const LonelyLabel = (): JSX.Element => <label>name</label>
 
 // jsx-a11y/control-has-associated-label: コントロールにはラベルが必要
-export const UnlabeledControl = (): JSX.Element => (
-  <button type="button" aria-hidden={false} />
-)
+export const UnlabeledControl = (): JSX.Element => <button type="button" aria-hidden={false} />
 
 // jsx-a11y/autocomplete-valid: autocomplete の値が不正
 export const BadAutocomplete = (): JSX.Element => (

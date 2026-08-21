@@ -56,7 +56,7 @@ export function constantBinary(value: number): boolean {
 // no-cond-assign: 条件式の中で代入している
 export function condAssign(value: number): boolean {
   let current = value
-  if (current = 1) {
+  if ((current = 1)) {
     return true
   }
   return false

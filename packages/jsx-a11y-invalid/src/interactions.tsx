@@ -6,7 +6,13 @@ export const ClickOnly = (): JSX.Element => <div onClick={(): void => undefined}
 
 // jsx-a11y/mouse-events-have-key-events: onMouseOver には onFocus も用意する
 export const MouseOnly = (): JSX.Element => (
-  <div role="button" tabIndex={0} onMouseOver={(): void => undefined} onClick={(): void => undefined} onKeyDown={(): void => undefined} />
+  <div
+    role="button"
+    tabIndex={0}
+    onMouseOver={(): void => undefined}
+    onClick={(): void => undefined}
+    onKeyDown={(): void => undefined}
+  />
 )
 
 // jsx-a11y/no-noninteractive-element-interactions: 非対話要素にハンドラを付けない

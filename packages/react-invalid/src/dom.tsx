@@ -10,7 +10,11 @@ export const UnknownProperty = (): JSX.Element => <div class="container" />
 export const StyleString = (): JSX.Element => <div style="color: red" />
 
 // react/void-dom-elements-no-children: img などの void 要素は子を持てない
-export const VoidChildren = (): JSX.Element => <img src="/a.png" alt="a">child</img>
+export const VoidChildren = (): JSX.Element => (
+  <img src="/a.png" alt="a">
+    child
+  </img>
+)
 
 // react/no-children-prop: children は props ではなく JSX の子として渡す
 export const ChildrenProp = (): JSX.Element => <div children="text" />

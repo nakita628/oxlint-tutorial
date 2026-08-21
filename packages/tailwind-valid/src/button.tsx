@@ -16,10 +16,7 @@ export const IconButton = (): JSX.Element => (
 
 // react/jsx-curly-brace-presence: 文字列はそのまま書く
 export const PrimaryButton = (): JSX.Element => (
-  <button
-    type="button"
-    className="rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white"
-  >
+  <button type="button" className="rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white">
     送信
   </button>
 )

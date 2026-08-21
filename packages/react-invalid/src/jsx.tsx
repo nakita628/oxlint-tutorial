@@ -92,4 +92,3 @@ export const Unescaped = (): JSX.Element => <div>It's fine</div>
 
 // react/jsx-no-undef: 未定義のコンポーネントを使っている
 export const Undefined = (): JSX.Element => <NotDefinedComponent />
-

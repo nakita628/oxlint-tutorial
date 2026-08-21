@@ -54,4 +54,3 @@ export const MemoParent = (): JSX.Element => {
   const handleClick = useCallback((): void => undefined, [])
   return <Child onClick={handleClick} />
 }
-

@@ -70,9 +70,9 @@ export function unusedLabel(): number {
 export function sequences(flag: boolean): number {
   let counter = 0
   // no-sequences: カンマ演算子を禁止（括弧で囲むと許容されるため、ここでは囲まない）
-  counter += 1, counter += 2
+  ;((counter += 1), (counter += 2))
   if (flag) {
-    return (counter += 3), counter
+    return ((counter += 3), counter)
   }
   return counter
 }
@@ -181,5 +181,5 @@ export function forDirection(): number {
 export function returnAssign(value: number): number {
   let result = value
   // no-return-assign: return 文の中で代入している
-  return result = value + 1
+  return (result = value + 1)
 }

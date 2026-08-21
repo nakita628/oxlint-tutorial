@@ -99,4 +99,3 @@ export class Boundary extends Component<{ children: JSX.Element }> {
 
 // react/no-namespace: 名前空間付きの JSX 要素は React では使えない
 export const Namespaced = (): JSX.Element => <svg:circle />
-
