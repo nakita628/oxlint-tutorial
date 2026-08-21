@@ -10,7 +10,9 @@
     "lint:type-aware": "oxlint --type-aware packages/type-aware-valid packages/type-aware-invalid",
     "print-config": "oxlint --print-config",
     "rules": "node scripts/rules-report.ts",
-    "verify": "node scripts/verify.ts"
+    "verify": "node scripts/verify.ts",
+    "fmt": "oxfmt",
+    "fmt:check": "oxfmt --check"
   },
   "devDependencies": {
     "oxfmt": "^0.64.0",

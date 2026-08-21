@@ -109,16 +109,14 @@ export default defineConfig({
   //   .gitignore / .prettierignore は既定で参照される（--ignore-path で変更可）
   //   ここに書いたパターンは、この設定ファイルのあるディレクトリを基準に解決される
   // ==================================================================
+  //
+  //   なお「その書き方そのものが lint の違反サンプル」になっている箇所は、
+  //   ファイル単位で除外するのではなく、コード側に `// oxfmt-ignore` コメントを
+  //   置いて構文単位で整形対象から外している
+  //   （`// prettier-ignore` も同じように使える）。
   ignorePatterns: [
     '**/node_modules/**',
     'docs/RULES.md', // 自動生成ファイル
-
-    // ---- 整形すると lint サンプルとして成立しなくなるファイル ----
-    // 「その書き方自体」が違反サンプルなので、フォーマッタの対象から外す
-    'packages/invalid/src/misc.ts', // eslint/no-unexpected-multiline
-    'packages/invalid/src/strings.ts', // eslint/no-irregular-whitespace, no-multi-str
-    'packages/invalid/src/solo/with-bom.ts', // eslint/unicode-bom
-    'packages/invalid/src/strict/**', // capitalized-comments / no-inline-comments / one-var など
   ],
 
   // ==================================================================

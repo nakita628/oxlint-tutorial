@@ -1,5 +1,6 @@
 name: lint
 
+# oxfmt でフォーマット済みであること、
 # valid パッケージがすべて成功し、invalid パッケージがすべて失敗することを確認する
 on:
   push:
@@ -8,6 +9,26 @@ on:
   workflow_dispatch:
 
 jobs:
+  # ------------------------------------------------------------------
+  # format: oxfmt でフォーマット済みであること
+  # ------------------------------------------------------------------
+  format:
+    name: oxfmt でフォーマット済みであること
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 24
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      - run: pnpm fmt:check
+
   # ------------------------------------------------------------------
   # valid: すべての packages/*-valid が「エラー 0 件・終了コード 0」になること
   # ------------------------------------------------------------------

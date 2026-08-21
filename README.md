@@ -7,9 +7,11 @@ oxlint v1.79.0 が持つ **870 ルールすべて** を `oxlint.config.ts` に�
 そのうち **859 ルール（99%）** について違反サンプルを用意して、実際に検出されることを検証しています。
 残り 11 ルールは「このリポジトリの構成では再現できない理由」を設定ファイルにコメントで明記しています。
 
-- 設定ファイルは TypeScript 形式（`oxlint.config.ts`）のみ
+コードの整形には同じ Oxc スタックの [oxfmt](https://oxc.rs/docs/guide/usage/formatter) を使っています。
+
+- 設定ファイルは TypeScript 形式（`oxlint.config.ts` / `oxfmt.config.ts`）のみ
 - サンプルコードは `.ts` / `.tsx` / `.cts` / `.vue`（`<script lang="ts">`）のみ
-- GitHub Actions で「valid はすべて成功」「invalid はすべて失敗」を CI として検証
+- GitHub Actions で「フォーマット済み」「valid はすべて成功」「invalid はすべて失敗」を CI として検証
 
 ## ルールカバレッジ
 
@@ -38,7 +40,8 @@ oxlint v1.79.0 が持つ **870 ルールすべて** を `oxlint.config.ts` に�
 
 ```
 .
-├─ oxlint.config.ts          # 870 ルールすべてを日本語コメント付きで列挙した設定
+├─ oxlint.config.ts          # 870 ルールすべてを日本語コメント付きで列挙した lint 設定
+├─ oxfmt.config.ts           # フォーマッタ設定（全 27 フィールドを日本語コメント付きで記述）
 ├─ scripts/
 │  ├─ verify.ts              # valid=0 件 / invalid≠0 件 + 全ルールの発火を検証
 │  └─ rules-report.ts        # docs/RULES.md を生成
@@ -86,6 +89,9 @@ Node.js は v22.18 以降（推奨 v24）が必要です。
 ## 実行
 
 ```bash
+pnpm fmt              # oxfmt で整形する
+pnpm fmt:check        # 整形済みかどうかだけ確認する（書き換えない）
+
 pnpm verify           # valid / invalid の期待値と、全ルールの発火を検証（推奨）
 pnpm rules            # docs/RULES.md を再生成
 
@@ -106,10 +112,11 @@ pnpm print-config     # 実際に適用される設定を JSON で出力
 
 ## GitHub Actions
 
-[`.github/workflows/lint.yml`](./.github/workflows/lint.yml) に 4 つのジョブがあります。
+[`.github/workflows/lint.yml`](./.github/workflows/lint.yml) に 5 つのジョブがあります。
 
 | ジョブ    | 内容                                                                             |
 | --------- | -------------------------------------------------------------------------------- |
+| `format`  | `pnpm fmt:check`（oxfmt で整形済みであること）                                   |
 | `valid`   | すべての `packages/*-valid` で oxlint が成功すること                             |
 | `invalid` | すべての `packages/*-invalid` で oxlint が失敗すること（成功したら CI を落とす） |
 | `verify`  | `pnpm verify`（全ルールの発火まで検証）                                          |

@@ -56,7 +56,9 @@ export function constantBinary(value: number): boolean {
 // no-cond-assign: 条件式の中で代入している
 export function condAssign(value: number): boolean {
   let current = value
-  if ((current = 1)) {
+  // oxfmt が括弧を補うとルールが検出できなくなるため整形対象から外す
+  // oxfmt-ignore
+  if (current = 1) {
     return true
   }
   return false

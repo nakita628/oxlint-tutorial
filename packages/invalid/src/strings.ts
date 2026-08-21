@@ -53,6 +53,8 @@ export function symbols(): symbol {
 
 // no-multi-str: バックスラッシュによる行継続で複数行文字列を作らない
 export function multiStr(): string {
+  // 行継続そのものが違反サンプルなので整形対象から外す
+  // oxfmt-ignore
   return 'first \
 second'
 }
@@ -64,6 +66,8 @@ export function lossOfPrecision(): number {
 
 // no-irregular-whitespace: コード中に通常でない空白（U+00A0）が混ざっている
 export function irregularWhitespace(): string {
+  // U+00A0 の位置そのものが違反サンプルなので整形対象から外す
+  // oxfmt-ignore
   const value = 'ab'
   return value
 }

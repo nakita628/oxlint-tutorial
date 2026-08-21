@@ -28,6 +28,8 @@ export function selfAssign(value: number): number {
 
 // no-unsafe-negation: in の左辺を否定している
 export function unsafeNegation(key: string, source: object): boolean {
+  // oxfmt が括弧を補うとルールが検出できなくなるため整形対象から外す
+  // oxfmt-ignore
   return !key in source
 }
 
@@ -71,5 +73,7 @@ export function arrayCallbackReturn(values: readonly number[]): number[] {
 
 // no-unexpected-multiline: 改行のせいで意図しない関数呼び出しになっている
 const multilineTarget = (): (() => number) => (): number => 1
+// 改行の位置そのものが違反サンプルなので整形対象から外す
+// oxfmt-ignore
 export const unexpectedMultiline = multilineTarget()
 ()
