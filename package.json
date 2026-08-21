@@ -1,0 +1,20 @@
+{
+  "name": "oxlint-tutorial",
+  "private": true,
+  "type": "module",
+  "packageManager": "pnpm@11.7.0",
+  "scripts": {
+    "lint": "oxlint",
+    "lint:valid": "oxlint packages/valid",
+    "lint:invalid": "oxlint packages/invalid",
+    "lint:fix": "oxlint --fix",
+    "lint:type-aware": "oxlint --type-aware packages/type-aware-valid packages/type-aware-invalid",
+    "print-config": "oxlint --print-config",
+    "rules": "node scripts/rules-report.ts",
+    "verify": "node scripts/verify.ts"
+  },
+  "devDependencies": {
+    "oxlint": "^1.79.0",
+    "oxlint-tsgolint": "^7.0.2001"
+  }
+}

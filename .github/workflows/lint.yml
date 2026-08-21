@@ -1,0 +1,132 @@
+name: lint
+
+# valid パッケージがすべて成功し、invalid パッケージがすべて失敗することを確認する
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  # ------------------------------------------------------------------
+  # valid: すべての packages/*-valid が「エラー 0 件・終了コード 0」になること
+  # ------------------------------------------------------------------
+  valid:
+    name: valid パッケージが成功すること
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 24
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      - name: 型情報を使わない valid パッケージ
+        run: |
+          set -euo pipefail
+          for dir in packages/valid packages/*-valid; do
+            case "$dir" in
+              packages/type-aware-valid) continue ;;
+            esac
+            echo "::group::oxlint $dir"
+            ./node_modules/.bin/oxlint "$dir"
+            echo "::endgroup::"
+          done
+
+      - name: 型情報を使う valid パッケージ（--type-aware）
+        run: ./node_modules/.bin/oxlint --type-aware packages/type-aware-valid
+
+  # ------------------------------------------------------------------
+  # invalid: すべての packages/*-invalid が「エラーあり・終了コード 1」になること
+  #   ここでは「失敗すること」が期待値なので、成功したら CI を落とす
+  # ------------------------------------------------------------------
+  invalid:
+    name: invalid パッケージが失敗すること
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 24
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      - name: 型情報を使わない invalid パッケージ
+        run: |
+          set -uo pipefail
+          failed=0
+          for dir in packages/invalid packages/*-invalid; do
+            case "$dir" in
+              packages/type-aware-invalid) continue ;;
+            esac
+            echo "::group::oxlint $dir （失敗が期待値）"
+            if ./node_modules/.bin/oxlint "$dir"; then
+              echo "::error::$dir でエラーが検出されませんでした（違反サンプルが検出されるべきです）"
+              failed=1
+            else
+              echo "$dir: 期待どおりエラーを検出しました"
+            fi
+            echo "::endgroup::"
+          done
+          exit "$failed"
+
+      - name: 型情報を使う invalid パッケージ（--type-aware）
+        run: |
+          set -uo pipefail
+          if ./node_modules/.bin/oxlint --type-aware packages/type-aware-invalid; then
+            echo "::error::packages/type-aware-invalid でエラーが検出されませんでした"
+            exit 1
+          fi
+          echo "packages/type-aware-invalid: 期待どおりエラーを検出しました"
+
+  # ------------------------------------------------------------------
+  # verify: 設定した全ルールが invalid 側で実際に発火することまで検証する
+  # ------------------------------------------------------------------
+  verify:
+    name: 設定した全ルールが発火すること
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 24
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      - run: pnpm verify
+
+  # ------------------------------------------------------------------
+  # rules: docs/RULES.md（カバレッジ表）が最新であること
+  # ------------------------------------------------------------------
+  rules:
+    name: ルールカバレッジ表が最新であること
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 24
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      - run: pnpm rules
+
+      - name: docs/RULES.md に差分が無いこと
+        run: git diff --exit-code docs/RULES.md
